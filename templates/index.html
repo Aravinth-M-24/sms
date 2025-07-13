@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Management</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -21,32 +21,8 @@
             font-weight: bold;
             border-radius: 8px;
         }
-        .btn-primary {
-            background-color: #007bff;
-            border: none;
-        }
-        .btn-secondary {
-            background-color: #6c757d;
-            border: none;
-        }
-        .btn-success {
-            background-color: #28a745;
-            border: none;
-        }
-        .btn-warning {
-            background-color: #ffc107;
-            border: none;
-            color: black;
-        }
-        .btn-danger {
-            background-color: #dc3545;
-            border: none;
-        }
         .btn:hover {
             opacity: 0.85;
-        }
-        .d-flex button, .d-flex select, .d-flex input {
-            margin-left: 5px;
         }
         .table {
             background: #fff;
@@ -56,38 +32,62 @@
             background: #343a40;
             color: #fff;
         }
+        @media (max-width: 576px) {
+            h2 {
+                font-size: 1.2rem;
+            }
+            .btn, .form-control, .form-select {
+                font-size: 0.9rem;
+            }
+            .container {
+                padding: 10px;
+            }
+        }
     </style>
 </head>
 <body>
 <div class="container mt-5">
     <h2 class="text-center mb-4">📚 Student Management System</h2>
 
-    <!-- Search, Filter, and Sorting Options -->
-    <div class="d-flex justify-content-between mb-3">
-        <input type="text" id="searchInput" class="form-control w-25" placeholder="🔍 Search by name or roll no" onkeyup="searchTable()">
-        <select id="filterColumn" class="form-select w-25">
-            <option value="8">Filter by Average</option>
-            <option value="2">Filter by Marks1</option>
-            <option value="3">Filter by Marks2</option>
-            <option value="4">Filter by Marks3</option>
-            <option value="5">Filter by Marks4</option>
-            <option value="6">Filter by Marks5</option>
-            <option value="7">Filter by Marks6</option>
-        </select>
-        <select id="filterOperator" class="form-select w-25">
-            <option value=">">Greater than</option>
-            <option value="<">Less than</option>
-            <option value="=">Equal to</option>
-        </select>
-        <input type="number" id="filterValue" class="form-control w-25" placeholder="Enter value">
-        <button class="btn btn-primary" onclick="applyFilter()">Apply Filter</button>
-        <button class="btn btn-secondary" onclick="sortTableByName()">Sort by Name ⬍</button>
-        <button class="btn btn-secondary" onclick="sortTableByMarks(8)">Sort by Average ⬍</button>
-        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    <!-- Responsive Search, Filter, Sort, and Logout -->
+    <div class="row g-2 mb-4">
+        <div class="col-md-3 col-sm-6">
+            <input type="text" id="searchInput" class="form-control form-control-sm" placeholder="🔍 Search name/roll no" onkeyup="searchTable()">
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <select id="filterColumn" class="form-select form-select-sm">
+                <option value="8">Filter by Average</option>
+                <option value="2">Marks1</option>
+                <option value="3">Marks2</option>
+                <option value="4">Marks3</option>
+                <option value="5">Marks4</option>
+                <option value="6">Marks5</option>
+                <option value="7">Marks6</option>
+            </select>
+        </div>
+        <div class="col-md-2 col-sm-6">
+            <select id="filterOperator" class="form-select form-select-sm">
+                <option value=">">Greater than</option>
+                <option value="<">Less than</option>
+                <option value="=">Equal to</option>
+            </select>
+        </div>
+        <div class="col-md-2 col-sm-6">
+            <input type="number" id="filterValue" class="form-control form-control-sm" placeholder="Enter value">
+        </div>
+        <div class="col-md-2 col-12 d-grid gap-2 d-md-block">
+            <button class="btn btn-primary btn-sm" onclick="applyFilter()">Apply</button>
+        </div>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 justify-content-between mb-3">
+        <button class="btn btn-secondary btn-sm" onclick="sortTableByName()">Sort by Name ⬍</button>
+        <button class="btn btn-secondary btn-sm" onclick="sortTableByMarks(8)">Sort by Average ⬍</button>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger btn-sm">Logout</a>
     </div>
 
     {% if current_user.role == "admin" or current_user.role == "teacher" %}
-    <!-- Add Student Form (Always Visible) -->
+    <!-- Add Student Form -->
     <div class="card mb-4">
         <div class="card-header bg-success text-white">➕ Add New Student</div>
         <div class="card-body">
@@ -97,11 +97,11 @@
                     <div class="col-md-4"><label>Roll No</label><input type="number" class="form-control" name="roll_no" required></div>
                     <div class="col-md-4">
                         <label>Marks (Subject 1-6)</label>
-                        <input type="number" class="form-control" name="marks1" required>
-                        <input type="number" class="form-control" name="marks2" required>
-                        <input type="number" class="form-control" name="marks3" required>
-                        <input type="number" class="form-control" name="marks4" required>
-                        <input type="number" class="form-control" name="marks5" required>
+                        <input type="number" class="form-control mb-1" name="marks1" required>
+                        <input type="number" class="form-control mb-1" name="marks2" required>
+                        <input type="number" class="form-control mb-1" name="marks3" required>
+                        <input type="number" class="form-control mb-1" name="marks4" required>
+                        <input type="number" class="form-control mb-1" name="marks5" required>
                         <input type="number" class="form-control" name="marks6" required>
                     </div>
                 </div>
@@ -112,47 +112,51 @@
     {% endif %}
 
     <!-- Student Table -->
-    <table class="table table-bordered text-center" id="studentTable">
-        <thead class="table-dark">
-            <tr>
-                <th>Name</th>
-                <th>Roll No</th>
-                <th>Marks1</th>
-                <th>Marks2</th>
-                <th>Marks3</th>
-                <th>Marks4</th>
-                <th>Marks5</th>
-                <th>Marks6</th>
-                <th>Average</th>
-                <th>Grade</th>
-                {% if current_user.role == "admin" %}<th>Actions</th>{% endif %}
-            </tr>
-        </thead>
-        <tbody>
-            {% for student in students %}
-            <tr>
-                <td>{{ student.name }}</td>
-                <td>{{ student.roll_no }}</td>
-                <td>{{ student.marks1 }}</td>
-                <td>{{ student.marks2 }}</td>
-                <td>{{ student.marks3 }}</td>
-                <td>{{ student.marks4 }}</td>
-                <td>{{ student.marks5 }}</td>
-                <td>{{ student.marks6 }}</td>
-                <td>{{ student.average }}</td>
-                <td>{{ student.grade }}</td>
-                {% if current_user.role == "admin" %}
-                <td>
-                    <a href="{{ url_for('update_student', id=student.id) }}" class="btn btn-warning btn-sm">✏️ Edit</a>
-                    <a href="{{ url_for('delete_student', id=student.id) }}" class="btn btn-danger btn-sm">🗑️ Delete</a>
-                </td>
-                {% endif %}
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table table-bordered text-center" id="studentTable">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Roll No</th>
+                    <th>Marks1</th>
+                    <th>Marks2</th>
+                    <th>Marks3</th>
+                    <th>Marks4</th>
+                    <th>Marks5</th>
+                    <th>Marks6</th>
+                    <th>Average</th>
+                    <th>Grade</th>
+                    {% if current_user.role == "admin" %}<th>Actions</th>{% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.roll_no }}</td>
+                    <td>{{ student.marks1 }}</td>
+                    <td>{{ student.marks2 }}</td>
+                    <td>{{ student.marks3 }}</td>
+                    <td>{{ student.marks4 }}</td>
+                    <td>{{ student.marks5 }}</td>
+                    <td>{{ student.marks6 }}</td>
+                    <td>{{ student.average }}</td>
+                    <td>{{ student.grade }}</td>
+                    {% if current_user.role == "admin" %}
+                    <td>
+                        <a href="{{ url_for('update_student', id=student.id) }}" class="btn btn-warning btn-sm">✏️ Edit</a>
+                        <a href="{{ url_for('delete_student', id=student.id) }}" class="btn btn-danger btn-sm">🗑️ Delete</a>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
-  <script>
+
+<!-- Scripts -->
+<script>
 function applyFilter() {
     let column = document.getElementById("filterColumn").value;
     let operator = document.getElementById("filterOperator").value;
@@ -170,6 +174,7 @@ function applyFilter() {
         row.style.display = shouldShow ? "" : "none";
     }
 }
+
 function searchTable() {
     let input = document.getElementById("searchInput").value.toLowerCase();
     let table = document.getElementById("studentTable");
@@ -188,25 +193,6 @@ function sortTableByName() {
     rows.sort((a, b) => a.cells[0].textContent.trim().localeCompare(b.cells[0].textContent.trim()));
     rows.forEach(row => table.appendChild(row));
 }
-function openUpdateModal(id, name, roll_no, marks1, marks2, marks3, marks4, marks5, marks6) {
-    console.log("Opening modal for:", name);
-    document.getElementById('updateId').value = id;
-    document.getElementById('updateName').value = name;
-    document.getElementById('updateRollNo').value = roll_no;
-    document.getElementById('updateMarks1').value = marks1;
-    document.getElementById('updateMarks2').value = marks2;
-    document.getElementById('updateMarks3').value = marks3;
-    document.getElementById('updateMarks4').value = marks4;
-    document.getElementById('updateMarks5').value = marks5;
-    document.getElementById('updateMarks6').value = marks6;
-
-    let updateForm = document.getElementById('updateForm');
-    updateForm.action = `/update_student/${id}`;
-
-    let updateModal = new bootstrap.Modal(document.getElementById('updateModal'));
-    updateModal.show();
-}
-
 
 function sortTableByMarks(column) {
     let table = document.querySelector("#studentTable tbody");
@@ -214,7 +200,6 @@ function sortTableByMarks(column) {
     rows.sort((a, b) => parseFloat(a.cells[column].textContent) - parseFloat(b.cells[column].textContent));
     rows.forEach(row => table.appendChild(row));
 }
-
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
